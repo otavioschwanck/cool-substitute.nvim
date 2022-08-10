@@ -107,6 +107,7 @@ function M.end_substitution()
   set('ignorecase', vim.g.cool_substitute_original_ignore_case)
 
   vim.g.cool_substitute_is_active = false
+  vim.g.cool_substitute_is_substituing = false
 
   vim.cmd("norm `" .. vim.g.cool_substitute_mark_char)
   vim.cmd("noh")

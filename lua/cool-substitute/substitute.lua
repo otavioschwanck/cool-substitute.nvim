@@ -14,6 +14,25 @@ local cool_substitute_esc = function()
   end
 end
 
+local escape_string = function(text)
+  local s = text
+
+  s = string.gsub(s, '\\', '\\\\')
+  s = string.gsub(s, '%[', '\\[')
+  s = string.gsub(s, '%]', '\\]')
+  s = string.gsub(s, '%!', '\\!')
+  s = string.gsub(s, '%$', '\\$')
+  s = string.gsub(s, '%#', '\\#')
+  s = string.gsub(s, '%*', '\\*')
+  s = string.gsub(s, '%?', '[\\?]')
+  s = string.gsub(s, '%^', '\\^')
+  s = string.gsub(s, '%%', '[\\%%]')
+  s = string.gsub(s, '%-', '[\\-]')
+  s = string.gsub(s, '%+', '[\\+]')
+
+  return s
+end
+
 local find_current_esc = function()
   local mappings = vim.api.nvim_get_keymap("N")
 
@@ -71,6 +90,10 @@ local start_recording = function(start_opts)
   vim.cmd("norm m" .. vim.g.cool_substitute_mark_char)
 
   vim.g.cool_substitute_is_substituing = true
+
+  vim.g.cool_substitute_word_for_status = word
+
+  word = escape_string(word)
 
   if opts.complete_word then
     word = "\\<" .. word .. "\\>"

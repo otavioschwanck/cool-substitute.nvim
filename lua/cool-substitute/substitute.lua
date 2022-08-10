@@ -56,9 +56,19 @@ local start_recording = function(start_opts)
   set('ignorecase', false)
   set_keymap()
 
-  vim.cmd("norm m" .. vim.g.cool_substitute_mark_char)
+  local word
 
-  local word = vim.fn.expand("<cword>")
+  if vim.fn.mode() == 'v' then
+    vim.cmd("norm \"" .. vim.g.cool_substitute_mark_char .. "y")
+
+    word = vim.fn.getreg(vim.g.cool_substitute_mark_char)
+  elseif vim.fn.mode() == 'v' then
+    print("Visual Line not supported.")
+  else
+    word = vim.fn.expand("<cword>")
+  end
+
+  vim.cmd("norm m" .. vim.g.cool_substitute_mark_char)
 
   vim.g.cool_substitute_is_substituing = true
 

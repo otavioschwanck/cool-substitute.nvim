@@ -1,10 +1,10 @@
 local M = {}
 
 local default_mappings = {
-  start = 'gM',
-  start_and_edit = 'gm',
-  start_and_edit_word = 'g!m',
-  start_word = 'g!M',
+  start = 'gm',
+  start_and_edit = 'gM',
+  start_and_edit_word = 'g!M',
+  start_word = 'g!m',
   apply_substitute_and_next = 'M',
   apply_substitute_and_prev = '<C-b>',
   apply_substitute_all = 'ga',

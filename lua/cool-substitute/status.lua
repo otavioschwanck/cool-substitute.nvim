@@ -4,7 +4,7 @@ function M.status_with_icons()
   if vim.g.cool_substitute_is_active then
     return " Writng Substitution"
   elseif vim.g.cool_substitute_is_substituing then
-    return " Applying substitution"
+    return " Applying substitution for " .. vim.g.cool_substitute_last_searched_word
   else
     return ""
   end
@@ -14,7 +14,7 @@ function M.status_no_icons()
   if vim.g.cool_substitute_is_active then
     return "Writng Substitution"
   elseif vim.g.cool_substitute_is_substituing then
-    return "Applying substitution"
+    return "Applying substitution for " .. vim.g.cool_substitute_last_searched_word
   else
     return ""
   end

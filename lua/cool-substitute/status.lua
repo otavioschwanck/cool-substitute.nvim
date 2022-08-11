@@ -22,9 +22,9 @@ end
 
 function M.status_color()
   if vim.g.cool_substitute_is_active then
-    return vim.g.cool_substitute_writing_substitution
-  elseif vim.g.cool_substitute_is_substituing then
     return vim.g.cool_substitute_applying_substitution
+  elseif vim.g.cool_substitute_is_substituing then
+    return vim.g.cool_substitute_writing_substitution
   end
 end
 

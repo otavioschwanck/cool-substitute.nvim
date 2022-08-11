@@ -23,8 +23,8 @@ function M.setup(setup_opts)
 
   vim.g.cool_substitute_reg_char = opts.reg_char or 'o'
   vim.g.cool_substitute_mark_char = opts.mark_char or 't'
-  vim.g.cool_substitute_writing_substitution = opts.writing_substitution_color or "#98be65"
-  vim.g.cool_substitute_applying_substitution = opts.applying_substitution_color or "#ECBE7B"
+  vim.g.cool_substitute_writing_substitution = opts.writing_substitution_color or "#ECBE7B"
+  vim.g.cool_substitute_applying_substitution = opts.applying_substitution_color or "#98be65"
 end
 
 return M

@@ -201,13 +201,9 @@ function M.substitute_all()
     stop_recording()
   end
 
-  local word = vim.g.cool_substitute_last_searched_word
-
-  while vim.fn.search(word, 'nc') ~= 0 do
+  repeat
     M.apply_and_next()
-  end
-
-  M.end_substitution()
+  until vim.fn.searchcount().exact_match == 0
 end
 
 function M.start(start_opts)

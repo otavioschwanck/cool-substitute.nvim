@@ -54,8 +54,9 @@ local set_keymap = function()
 
   if vim.g.cool_substitute_current_esc then
     vim.keymap.del("n", "<esc>", {})
-    vim.keymap.set("n", "<esc>", cool_substitute_esc, {})
   end
+
+  vim.keymap.set("n", "<esc>", cool_substitute_esc, {})
 end
 
 local restore_keymap = function()

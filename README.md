@@ -17,7 +17,7 @@ It's a simple and fast substitute for neovim.  Can easily replace multiple-curso
 ## Packer
 
 ```lua
-use { '~/Projetos/cool-substitute'}
+use { 'otavioschwanck/cool-substitute.nvim'}
 
 require'cool-substitute'.setup({
   setup_keybindings = true,

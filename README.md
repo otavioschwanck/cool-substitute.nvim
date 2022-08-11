@@ -43,7 +43,7 @@ require('cool-substitute.status').status_no_icons -- return status without icons
 require('cool-substitute.status').status_color() -- return the color depending on the status of editing
 ```
 
-Example for lualine:
+Example of a section for lualine:
 ```lua
 {
   require('cool-substitute.status').status_with_icons,

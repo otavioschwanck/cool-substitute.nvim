@@ -78,11 +78,17 @@ using gm to mark the places, then using `nicwest/vim-camelsnek` plugin to change
 
 ![demo](gifs/3.gif)
 
-## Pratical example 3:
+## Pratical example 4:
 
 Marking with gm, then using U to uppercase stuff, and x to remove.  Also skipping some words.
 
 ![demo](gifs/4.gif)
+
+## Pratical example 5:
+
+Marking with gm, using surround, changing case and running a substitute on line on each match.
+
+![demo](gifs/5.gif)
 
 # Similar plugins
 

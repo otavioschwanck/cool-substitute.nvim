@@ -127,6 +127,8 @@ local stop_recording = function(stop_opts)
 
   local word = vim.g.cool_substitute_last_searched_word
 
+  vim.fn.setreg('/', word)
+
   if opts.backwards then
     vim.fn.search(word, 'b')
   else
@@ -155,8 +157,9 @@ function M.apply_and_next()
     print("Not in cool substitute.")
   else
     local word = vim.g.cool_substitute_last_searched_word
-
     vim.cmd("norm! @" .. vim.g.cool_substitute_reg_char)
+
+    vim.fn.setreg('/', word)
 
     local result = vim.fn.search(word)
 
@@ -175,8 +178,9 @@ function M.apply_and_previous()
     print("Not in cool substitute.")
   else
     local word = vim.g.cool_substitute_last_searched_word
-
     vim.cmd("norm! @" .. vim.g.cool_substitute_reg_char)
+
+    vim.fn.setreg('/', word)
 
     local result = vim.fn.search(word, "b")
 

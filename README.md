@@ -58,7 +58,7 @@ Example of a section for lualine:
 On word / region, press `gm` or `gM` to start.  Do the changes (you can go outside the word too).
 Then keep pressing `M` to start substitution.  Press n to skip a word and press `<esc>` do stop the substitutions.
 
-## Pratical example 1:
+## Practical example 1:
 
 Just changing all the ocurrences with ga.
 
@@ -66,25 +66,25 @@ Commands: `gM` and `ga`.
 
 ![demo](gifs/2.gif)
 
-## Pratical example 2:
+## Practical example 2:
 
 Same as 1, but using g!M instead to only change full word (not matches inside other words)
 
 ![demo](gifs/1.gif)
 
-## Pratical example 3:
+## Practical example 3:
 
 using gm to mark the places, then using `nicwest/vim-camelsnek` plugin to change the cases
 
 ![demo](gifs/3.gif)
 
-## Pratical example 4:
+## Practical example 4:
 
 Marking with gm, then using U to uppercase stuff, and x to remove.  Also skipping some words.
 
 ![demo](gifs/4.gif)
 
-## Pratical example 5:
+## Practical example 5:
 
 Marking with gm, using surround, changing case and running a substitute on line on each match.
 
@@ -119,3 +119,14 @@ Pros of cool-substitute:
 Cons:
 
 - Is not really a multiple cursors.
+
+# TODO:
+
+[ ] - Add preview for other matches
+[ ] - Autocomplete support
+
+# More for me
+
+Check out my neovim framework for JS and Ruby, it is user friendly, has builtin interactive tutorial and cheatsheet inside vim:
+
+https://github.com/otavioschwanck/mood-nvim

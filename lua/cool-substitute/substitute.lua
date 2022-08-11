@@ -104,7 +104,7 @@ local start_recording = function(start_opts)
 
   vim.fn.search(word, 'n')
   vim.fn.setreg('/', word)
-  vim.cmd("norm! lN")
+  vim.cmd("norm! nN")
 
   vim.cmd("norm! q" .. vim.g.cool_substitute_reg_char)
 

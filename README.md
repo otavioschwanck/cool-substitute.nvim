@@ -122,8 +122,8 @@ Cons:
 
 # TODO:
 
-[ ] - Add preview for other matches
-[ ] - Autocomplete support
+- [ ] - Add preview for other matches
+- [ ] - Autocomplete support
 
 # More for me
 

@@ -33,6 +33,24 @@ require'cool-substitute'.setup({
 })
 ```
 
+# Configuring your statusline
+
+You can add in your statusline using those functions:
+
+```lua
+require('cool-substitute.status').status_with_icons -- return status with icons (nerdfonts)
+require('cool-substitute.status').status_no_icons -- return status without icons
+require('cool-substitute.status').status_color() -- return the color depending on the status of editing
+```
+
+Example for lualine:
+```lua
+{
+  require('cool-substitute.status').status_with_icons,
+  color = function() return { fg = require('cool-substitute.status').status_color() } end
+}
+```
+
 # Example of usages
 
 On word / region, press `gm` or `gM` to start.  Do the changes (you can go outside the word too).

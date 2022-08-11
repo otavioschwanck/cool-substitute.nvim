@@ -113,6 +113,13 @@ local start_recording = function(start_opts)
   end
 end
 
+local verify_if_is_last_word = function()
+  local word = vim.g.cool_substitute_last_searched_word
+  local current_line = vim.fn.getline('.')
+
+  return string.sub(current_line, -(#word), -1) == word
+end
+
 local stop_recording = function(stop_opts)
   local opts = stop_opts or {}
 
@@ -149,6 +156,21 @@ function M.end_substitution()
   vim.cmd("noh")
 end
 
+local normalize_line = function()
+  if verify_if_is_last_word() then
+    vim.cmd("norm A                    ")
+    vim.g.cool_substitute_normalized_line = true
+    vim.cmd("norm N")
+  end
+end
+
+local remove_spaces = function()
+  if vim.g.cool_substitute_normalized_line then
+    vim.g.cool_substitute_normalized_line = false
+    vim.cmd("s/\\ *$//ge")
+  end
+end
+
 function M.apply_and_next()
   local is_recording = vim.fn.reg_recording() ~= ''
 
@@ -158,7 +180,12 @@ function M.apply_and_next()
     print("Not in cool substitute.")
   else
     local word = vim.g.cool_substitute_last_searched_word
+
+    normalize_line()
+
     vim.cmd("norm! @" .. vim.g.cool_substitute_reg_char)
+
+    remove_spaces()
 
     vim.fn.setreg('/', word)
 
@@ -179,7 +206,12 @@ function M.apply_and_previous()
     print("Not in cool substitute.")
   else
     local word = vim.g.cool_substitute_last_searched_word
+
+    normalize_line()
+
     vim.cmd("norm! @" .. vim.g.cool_substitute_reg_char)
+
+    remove_spaces()
 
     vim.fn.setreg('/', word)
 

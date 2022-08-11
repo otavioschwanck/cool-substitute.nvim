@@ -28,11 +28,4 @@ function M.status_color()
   end
 end
 
-function M.lualine_section()
-  return {
-    M.status_with_icons,
-    color = function() return { fg = M.status_color() } end
-  }
-end
-
 return M

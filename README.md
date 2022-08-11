@@ -54,7 +54,7 @@ Example of a section for lualine:
 # Example of usages
 
 On word / region, press `gm` or `gM` to start.  Do the changes (you can go outside the word too).
-Then keep pressing `M` to start substitution.  Press n to skip a word and press <esc> do stop the substitutions.
+Then keep pressing `M` to start substitution.  Press n to skip a word and press `<esc>` do stop the substitutions.
 
 ## Pratical example 1:
 

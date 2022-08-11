@@ -25,9 +25,14 @@ function M.status_color()
     return "#98be65"
   elseif vim.g.cool_substitute_is_substituing then
     return "#ECBE7B"
-  else
-    return "#fff"
   end
+end
+
+function M.lualine_section()
+  return {
+    M.status_with_icons,
+    color = function() return { fg = M.status_color() } end
+  }
 end
 
 return M

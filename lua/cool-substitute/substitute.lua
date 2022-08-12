@@ -177,7 +177,11 @@ function M.apply_and_next()
   if is_recording then
     stop_recording()
   elseif not (vim.g.cool_substitute_is_active or vim.g.cool_substitute_is_substituing) then
-    print("Not in cool substitute.")
+    if vim.g.substitute_with_next_key then
+      M.start({ edit_word = true })
+    else
+      M.start({})
+    end
   else
     local word = vim.g.cool_substitute_last_searched_word
 

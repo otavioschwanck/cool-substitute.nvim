@@ -33,7 +33,8 @@ require'cool-substitute'.setup({
   -- reg_char = 'o', -- letter to save macro (Dont use number or uppercase here)
   -- mark_char = 't', -- mark the position at start of macro
   -- writing_substitution_color = "#ECBE7B", -- for status line
-  -- applying_substitution_color = "#98be65" -- for status line
+  -- applying_substitution_color = "#98be65", -- for status line
+  -- edit_word_when_starting_with_substitute_key = true (press M to mark and edit when not executing anything anything)
 })
 ```
 

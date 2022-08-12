@@ -25,6 +25,7 @@ function M.setup(setup_opts)
   vim.g.cool_substitute_mark_char = opts.mark_char or 't'
   vim.g.cool_substitute_writing_substitution = opts.writing_substitution_color or "#ECBE7B"
   vim.g.cool_substitute_applying_substitution = opts.applying_substitution_color or "#98be65"
+  vim.g.substitute_with_next_key = opts.edit_word_when_starting_with_substitute_key or true
 end
 
 return M

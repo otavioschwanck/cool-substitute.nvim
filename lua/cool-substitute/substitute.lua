@@ -312,9 +312,13 @@ end
 
 local normalize_line = function()
   if verify_if_is_last_word() then
+    local current_pos = { vim.fn.line('.'), vim.fn.col('.') }
+
     vim.cmd("norm A" .. quick_key_to_substitute)
     vim.g.cool_substitute_normalized_line = true
     vim.cmd("norm N")
+
+    vim.fn.cursor(current_pos[1], current_pos[2])
   end
 end
 

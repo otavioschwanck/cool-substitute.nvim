@@ -342,7 +342,7 @@ function M.apply_and_next()
     save_to_applied()
 
     if verify_if_ended() then
-      return
+      return true
     end
 
     goto_next()
@@ -390,9 +390,15 @@ function M.substitute_all()
     stop_recording()
   end
 
+  local result
+
   repeat
-    M.apply_and_next()
-  until verify_if_ended()
+    result = M.apply_and_next()
+
+    if result then
+      return
+    end
+  until false
 end
 
 function M.start(start_opts)

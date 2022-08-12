@@ -2,9 +2,9 @@ local M = {}
 
 function M.status_with_icons()
   if vim.g.cool_substitute_is_active then
-    return " Applying "
+    return " Applying " .. vim.g.cool_substitute_current_match .. "/" .. #vim.g.cool_substitute_matches
   elseif vim.g.cool_substitute_is_substituing then
-    return " Writing "
+    return " Writing " .. vim.g.cool_substitute_current_match .. "/" .. #vim.g.cool_substitute_matches
   else
     return ""
   end
@@ -12,9 +12,9 @@ end
 
 function M.status_no_icons()
   if vim.g.cool_substitute_is_active then
-    return "Applying substitution"
+    return "Applying substitution " .. vim.g.cool_substitute_current_match .. "/" .. #vim.g.cool_substitute_matches
   elseif vim.g.cool_substitute_is_substituing then
-    return "Writing Substitution"
+    return "Writing Substitution " .. vim.g.cool_substitute_current_match .. "/" .. #vim.g.cool_substitute_matches
   else
     return ""
   end

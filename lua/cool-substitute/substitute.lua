@@ -4,6 +4,64 @@ local set = vim.api.nvim_set_option
 
 local quick_key_to_substitute = '                                        SafeEditText123718cxzDUSAduasCGZXIUcgzIg'
 
+local get_pos = function()
+  return vim.fn.searchpos(vim.g.cool_substitute_last_searched_word, 'n')
+end
+
+local save_search_pos = function()
+  local current_position = get_pos()
+  local positions = {}
+
+  repeat
+    table.insert(positions, get_pos())
+    vim.fn.search(vim.g.cool_substitute_last_searched_word)
+  until get_pos()[1] == current_position[1] and get_pos()[2] == current_position[2]
+
+  local start = positions[#positions]
+  table.remove(positions, #positions)
+  table.insert(positions, 1, start)
+
+  vim.g.cool_substitute_matches = positions
+  vim.g.cool_substitute_current_match = 1
+  vim.g.cool_substitute_already_applieds = {}
+end
+
+local current_match_already_applied = function()
+  local applied = false
+
+  for i = 1, #vim.g.cool_substitute_already_applieds, 1 do
+    if vim.g.cool_substitute_current_match == vim.g.cool_substitute_already_applieds[i] then
+      applied = true
+    end
+  end
+
+  return applied
+end
+
+local go_to = function(pos)
+  vim.fn.cursor(pos[1], pos[2])
+end
+
+local save_to_applied = function()
+  local applieds = vim.g.cool_substitute_already_applieds
+
+  table.insert(applieds, vim.g.cool_substitute_current_match)
+
+  vim.g.cool_substitute_already_applieds = applieds
+end
+
+local verify_if_ended = function()
+  local applieds = vim.g.cool_substitute_already_applieds
+
+  if #applieds == #vim.g.cool_substitute_matches then
+    M.end_substitution()
+
+    return true
+  end
+
+  return false
+end
+
 local cool_substitute_esc = function()
   if vim.g.cool_substitute_is_active then
     M.end_substitution()
@@ -108,6 +166,8 @@ local start_recording = function(start_opts)
   vim.fn.setreg('/', word)
   vim.cmd("norm! nN")
 
+  save_search_pos()
+
   vim.cmd("norm! q" .. vim.g.cool_substitute_reg_char)
 
   if opts.edit_word then
@@ -135,14 +195,14 @@ local stop_recording = function(stop_opts)
   local reg_char = vim.g.cool_substitute_reg_char
   vim.fn.setreg(reg_char, string.sub(vim.fn.getreg(reg_char), 1, -(1 + #next_keymap)))
 
-  local word = vim.g.cool_substitute_last_searched_word
-
-  vim.fn.setreg('/', word)
+  vim.g.cool_substitute_already_applieds = { 1 }
 
   if opts.backwards then
-    vim.fn.search(word, 'b')
+    vim.g.cool_substitute_current_match = #vim.g.cool_substitute_matches
+    go_to(vim.g.cool_substitute_matches[#vim.g.cool_substitute_matches])
   else
-    vim.fn.search(word)
+    vim.g.cool_substitute_current_match = 2
+    go_to(vim.g.cool_substitute_matches[2])
   end
 end
 
@@ -194,13 +254,24 @@ function M.apply_and_next()
 
     remove_spaces()
 
+    vim.g.cool_substitute_last_searched_word = word
     vim.fn.setreg('/', word)
 
-    local result = vim.fn.search(word)
+    save_to_applied()
 
-    if result == 0 then
-      M.end_substitution()
+    if verify_if_ended() then
+      return
     end
+
+    if (vim.g.cool_substitute_current_match == #vim.g.cool_substitute_matches) then
+      vim.g.cool_substitute_current_match = 0
+    end
+
+    repeat
+      vim.g.cool_substitute_current_match = vim.g.cool_substitute_current_match + 1
+    until not current_match_already_applied()
+
+    go_to(vim.g.cool_substitute_matches[vim.g.cool_substitute_current_match])
   end
 end
 
@@ -220,13 +291,24 @@ function M.apply_and_previous()
 
     remove_spaces()
 
+    vim.g.cool_substitute_last_searched_word = word
     vim.fn.setreg('/', word)
 
-    local result = vim.fn.search(word, "b")
+    save_to_applied()
 
-    if result == 0 then
-      M.end_substitution()
+    if verify_if_ended() then
+      return
     end
+
+    if (vim.g.cool_substitute_current_match == 1) then
+      vim.g.cool_substitute_current_match = #vim.g.cool_substitute_matches + 1
+    end
+
+    repeat
+      vim.g.cool_substitute_current_match = vim.g.cool_substitute_current_match - 1
+    until not current_match_already_applied()
+
+    go_to(vim.g.cool_substitute_matches[vim.g.cool_substitute_current_match])
   end
 end
 
@@ -242,7 +324,7 @@ function M.substitute_all()
 
   repeat
     M.apply_and_next()
-  until vim.fn.searchcount().exact_match == 0
+  until verify_if_ended()
 end
 
 function M.start(start_opts)

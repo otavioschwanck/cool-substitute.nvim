@@ -56,10 +56,19 @@ Example of a section for lualine:
 }
 ```
 
-# Example of usages
+# Quickstart
 
-On word / region, press `gm` or `gM` to start.  Do the changes (you can go outside the word too).
-Then keep pressing `M` to start substitution.  Press n to skip a word and press `<esc>` do stop the substitutions.
+1. Press `gm` or `M` to mark word / region.  M will also delete the word.
+2. Do anything you want, change with r, e, add something at beggining of line, etc
+3. press `M` or `<C-b>` to go finish the editing record and go forward / backward
+4. Keep pressing `M` or `<C-b>` to go applying the changes in selection
+5. Press `<ENTER>` to mark match at cursor to be ignored
+6. Navigate without changing with Ctrl + j and Ctrl + k
+7. To change all occurrences, press `ga`
+
+You can press `<ESC>` at any point to cancel the substitution.
+
+# Example of usages
 
 ## Practical example 1:
 

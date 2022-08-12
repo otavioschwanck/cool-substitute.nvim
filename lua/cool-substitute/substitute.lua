@@ -151,22 +151,6 @@ local set_keymap = function()
   vim.g.cool_substitute_current_cj = find_current_map("<c-j>")
   vim.g.cool_substitute_current_ck = find_current_map("<c-k>")
 
-  if vim.g.cool_substitute_current_esc then
-    vim.keymap.del("n", "<esc>", {})
-  end
-
-  if vim.g.cool_substitute_current_cr then
-    vim.keymap.del("n", "<cr>", {})
-  end
-
-  if vim.g.cool_substitute_current_cj then
-    vim.keymap.del("n", "<c-j>", {})
-  end
-
-  if vim.g.cool_substitute_current_ck then
-    vim.keymap.del("n", "<c-k>", {})
-  end
-
   vim.keymap.set("n", "<esc>", cool_substitute_esc, {})
   vim.keymap.set("n", "<cr>", M.skip, {})
   vim.keymap.set("n", "<C-j>", goto_next, {})
@@ -174,27 +158,24 @@ local set_keymap = function()
 end
 
 local restore_keymap = function()
-  if(vim.g.cool_substitute_current_esc) then
-    vim.keymap.del("n", "<esc>", {})
+  vim.keymap.del("n", "<esc>", {})
+  vim.keymap.del("n", "<cr>", {})
+  vim.keymap.del("n", "<C-j>", {})
+  vim.keymap.del("n", "<C-k>", {})
 
+  if(vim.g.cool_substitute_current_esc) then
     vim.keymap.set("n", "<esc>", vim.g.cool_substitute_current_esc, {})
   end
 
   if(vim.g.cool_substitute_current_cr) then
-    vim.keymap.del("n", "<cr>", {})
-
     vim.keymap.set("n", "<cr>", vim.g.cool_substitute_current_cr, {})
   end
 
   if(vim.g.cool_substitute_current_cj) then
-    vim.keymap.del("n", "<C-j>", {})
-
     vim.keymap.set("n", "<C-j>", vim.g.cool_substitute_current_cr, {})
   end
 
   if(vim.g.cool_substitute_current_ck) then
-    vim.keymap.del("n", "<C-k>", {})
-
     vim.keymap.set("n", "<C-k>", vim.g.cool_substitute_current_cr, {})
   end
 end

@@ -4,6 +4,10 @@ local set = vim.api.nvim_set_option
 
 local quick_key_to_substitute = '                                        SafeEditText123718cxzDUSAduasCGZXIUcgzIg'
 
+local go_to = function(pos)
+  vim.fn.cursor(pos[1], pos[2])
+end
+
 local get_pos = function()
   return vim.fn.searchpos(vim.g.cool_substitute_last_searched_word, 'n')
 end
@@ -38,8 +42,40 @@ local current_match_already_applied = function()
   return applied
 end
 
-local go_to = function(pos)
-  vim.fn.cursor(pos[1], pos[2])
+local goto_previous = function()
+  if vim.g.cool_substitute_applying_substitution then
+    if (vim.g.cool_substitute_current_match == 1) then
+      vim.g.cool_substitute_current_match = #vim.g.cool_substitute_matches
+    end
+
+    repeat
+      vim.g.cool_substitute_current_match = vim.g.cool_substitute_current_match - 1
+
+      if (vim.g.cool_substitute_current_match <= 1) then
+        vim.g.cool_substitute_current_match = #vim.g.cool_substitute_matches
+      end
+    until not current_match_already_applied()
+
+    go_to(vim.g.cool_substitute_matches[vim.g.cool_substitute_current_match])
+  end
+end
+
+local goto_next = function()
+  if vim.g.cool_substitute_applying_substitution then
+    if (vim.g.cool_substitute_current_match == #vim.g.cool_substitute_matches) then
+      vim.g.cool_substitute_current_match = 0
+    end
+
+    repeat
+      vim.g.cool_substitute_current_match = vim.g.cool_substitute_current_match + 1
+
+      if (vim.g.cool_substitute_current_match > #vim.g.cool_substitute_matches) then
+        vim.g.cool_substitute_current_match = 1
+      end
+    until not current_match_already_applied()
+
+    go_to(vim.g.cool_substitute_matches[vim.g.cool_substitute_current_match])
+  end
 end
 
 local save_to_applied = function()
@@ -93,7 +129,7 @@ local escape_string = function(text)
   return s
 end
 
-local find_current_esc = function()
+local find_current_map = function(map)
   local mappings = vim.api.nvim_get_keymap("N")
 
   local result
@@ -101,7 +137,7 @@ local find_current_esc = function()
   for i = 1, #mappings, 1 do
     local mapping_buffer = mappings[i].buffer
 
-    if string.lower(mappings[i].lhs) == "<esc>" and (mapping_buffer == 0) then
+    if string.lower(mappings[i].lhs) == map and (mapping_buffer == 0) then
       result = mappings[i].rhs
     end
   end
@@ -110,13 +146,31 @@ local find_current_esc = function()
 end
 
 local set_keymap = function()
-  vim.g.cool_substitute_current_esc = find_current_esc()
+  vim.g.cool_substitute_current_esc = find_current_map("<esc>")
+  vim.g.cool_substitute_current_cr = find_current_map("<cr>")
+  vim.g.cool_substitute_current_cj = find_current_map("<c-j>")
+  vim.g.cool_substitute_current_ck = find_current_map("<c-k>")
 
   if vim.g.cool_substitute_current_esc then
     vim.keymap.del("n", "<esc>", {})
   end
 
+  if vim.g.cool_substitute_current_cr then
+    vim.keymap.del("n", "<cr>", {})
+  end
+
+  if vim.g.cool_substitute_current_cj then
+    vim.keymap.del("n", "<cj>", {})
+  end
+
+  if vim.g.cool_substitute_current_ck then
+    vim.keymap.del("n", "<ck>", {})
+  end
+
   vim.keymap.set("n", "<esc>", cool_substitute_esc, {})
+  vim.keymap.set("n", "<cr>", M.skip, {})
+  vim.keymap.set("n", "<C-j>", goto_next, {})
+  vim.keymap.set("n", "<C-k>", goto_previous, {})
 end
 
 local restore_keymap = function()
@@ -124,6 +178,24 @@ local restore_keymap = function()
     vim.keymap.del("n", "<esc>", {})
 
     vim.keymap.set("n", "<esc>", vim.g.cool_substitute_current_esc, {})
+  end
+
+  if(vim.g.cool_substitute_current_cr) then
+    vim.keymap.del("n", "<cr>", {})
+
+    vim.keymap.set("n", "<cr>", vim.g.cool_substitute_current_cr, {})
+  end
+
+  if(vim.g.cool_substitute_current_cj) then
+    vim.keymap.del("n", "<C-j>", {})
+
+    vim.keymap.set("n", "<C-j>", vim.g.cool_substitute_current_cr, {})
+  end
+
+  if(vim.g.cool_substitute_current_ck) then
+    vim.keymap.del("n", "<C-k>", {})
+
+    vim.keymap.set("n", "<C-k>", vim.g.cool_substitute_current_cr, {})
   end
 end
 
@@ -198,11 +270,17 @@ local stop_recording = function(stop_opts)
   vim.g.cool_substitute_already_applieds = { 1 }
 
   if opts.backwards then
+    vim.g.cool_substitute_last_action = 'prev'
     vim.g.cool_substitute_current_match = #vim.g.cool_substitute_matches
     go_to(vim.g.cool_substitute_matches[#vim.g.cool_substitute_matches])
   else
-    vim.g.cool_substitute_current_match = 2
-    go_to(vim.g.cool_substitute_matches[2])
+    if #vim.g.cool_substitute_matches > 1 then
+      vim.g.cool_substitute_last_action = 'next'
+      vim.g.cool_substitute_current_match = 2
+      go_to(vim.g.cool_substitute_matches[2])
+    else
+      M.end_substitution()
+    end
   end
 end
 
@@ -213,6 +291,7 @@ function M.end_substitution()
 
   vim.g.cool_substitute_is_active = false
   vim.g.cool_substitute_is_substituing = false
+  vim.g.cool_substitute_last_action = nil
 
   vim.cmd("norm `" .. vim.g.cool_substitute_mark_char)
   vim.cmd("noh")
@@ -234,6 +313,22 @@ local remove_spaces = function()
   end
 end
 
+function M.skip()
+  if vim.g.cool_substitute_applying_substitution then
+    save_to_applied()
+
+    if verify_if_ended() then
+      return
+    end
+
+    if vim.g.cool_substitute_last_action == 'prev' then
+      goto_previous()
+    else
+      goto_next()
+    end
+  end
+end
+
 function M.apply_and_next()
   local is_recording = vim.fn.reg_recording() ~= ''
 
@@ -246,6 +341,8 @@ function M.apply_and_next()
       M.start({})
     end
   else
+    vim.g.cool_substitute_last_action = 'next'
+
     local word = vim.g.cool_substitute_last_searched_word
 
     normalize_line()
@@ -263,15 +360,7 @@ function M.apply_and_next()
       return
     end
 
-    if (vim.g.cool_substitute_current_match == #vim.g.cool_substitute_matches) then
-      vim.g.cool_substitute_current_match = 0
-    end
-
-    repeat
-      vim.g.cool_substitute_current_match = vim.g.cool_substitute_current_match + 1
-    until not current_match_already_applied()
-
-    go_to(vim.g.cool_substitute_matches[vim.g.cool_substitute_current_match])
+    goto_next()
   end
 end
 
@@ -283,6 +372,8 @@ function M.apply_and_previous()
   elseif not (vim.g.cool_substitute_is_active or vim.g.cool_substitute_is_substituing) then
     print("Not in cool substitute.")
   else
+    vim.g.cool_substitute_last_action = 'prev'
+
     local word = vim.g.cool_substitute_last_searched_word
 
     normalize_line()
@@ -300,15 +391,7 @@ function M.apply_and_previous()
       return
     end
 
-    if (vim.g.cool_substitute_current_match == 1) then
-      vim.g.cool_substitute_current_match = #vim.g.cool_substitute_matches + 1
-    end
-
-    repeat
-      vim.g.cool_substitute_current_match = vim.g.cool_substitute_current_match - 1
-    until not current_match_already_applied()
-
-    go_to(vim.g.cool_substitute_matches[vim.g.cool_substitute_current_match])
+    goto_previous()
   end
 end
 

@@ -254,9 +254,13 @@ local stop_recording = function(stop_opts)
   vim.g.cool_substitute_already_applieds = { 1 }
 
   if opts.backwards then
-    vim.g.cool_substitute_last_action = 'prev'
-    vim.g.cool_substitute_current_match = #vim.g.cool_substitute_matches
-    go_to(vim.g.cool_substitute_matches[#vim.g.cool_substitute_matches])
+    if #vim.g.cool_substitute_matches > 1 then
+      vim.g.cool_substitute_last_action = 'prev'
+      vim.g.cool_substitute_current_match = #vim.g.cool_substitute_matches
+      go_to(vim.g.cool_substitute_matches[#vim.g.cool_substitute_matches])
+    else
+      M.end_substitution()
+    end
   else
     if #vim.g.cool_substitute_matches > 1 then
       vim.g.cool_substitute_last_action = 'next'
@@ -332,7 +336,7 @@ function M.apply_and_next()
 
     normalize_line()
 
-    vim.cmd("norm! @" .. vim.g.cool_substitute_reg_char)
+    vim.cmd("norm! nN@" .. vim.g.cool_substitute_reg_char)
 
     remove_spaces()
 
@@ -363,7 +367,7 @@ function M.apply_and_previous()
 
     normalize_line()
 
-    vim.cmd("norm! @" .. vim.g.cool_substitute_reg_char)
+    vim.cmd("norm! nN@" .. vim.g.cool_substitute_reg_char)
 
     remove_spaces()
 

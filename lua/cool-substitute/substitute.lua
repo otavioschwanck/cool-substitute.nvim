@@ -17,6 +17,28 @@ local fix_cursor_position = function()
   end
 end
 
+function M.cool_x()
+  if (vim.fn.col('.') == #vim.fn.getline('.')) then
+    vim.fn.setline('.', vim.fn.getline('.') .. " ")
+  end
+  vim.keymap.del("n", "x", {})
+  vim.cmd("norm x")
+  vim.keymap.set("n", "x", M.cool_x, {})
+end
+
+function M.cool_de(map)
+  local m = map or "de"
+
+  vim.keymap.del("n", m, {})
+  vim.cmd("norm " .. m)
+  vim.keymap.set("n", m, M.cool_de, {})
+
+  if ((vim.fn.col('.') == #vim.fn.getline('.')) and not vim.g.cool_substitute_is_active) then
+    vim.fn.setline('.', vim.fn.getline('.') .. " ")
+    vim.fn.cursor(vim.fn.line('.'), #vim.fn.getline('.'))
+  end
+end
+
 local go_to = function(pos)
   vim.fn.cursor(pos[1], pos[2])
 
@@ -154,7 +176,7 @@ local escape_string = function(text)
 end
 
 local find_current_map = function(map)
-  local mappings = vim.api.nvim_get_keymap("N")
+  local mappings = vim.api.nvim_get_keymap("n")
 
   local result
 
@@ -175,11 +197,17 @@ local set_keymap = function()
   vim.g.cool_substitute_current_cj = find_current_map("<c-j>")
   vim.g.cool_substitute_current_ck = find_current_map("<c-k>")
   vim.g.cool_substitute_current_e = find_current_map("e")
+  vim.g.cool_substitute_current_x = find_current_map("x")
+  vim.g.cool_substitute_current_de = find_current_map("de")
+  vim.g.cool_substitute_current_dw = find_current_map("dw")
 
   vim.keymap.set("n", "<esc>", cool_substitute_esc, {})
   vim.keymap.set("n", "<cr>", M.skip, {})
   vim.keymap.set("n", "<C-j>", goto_next, {})
   vim.keymap.set("n", "<C-k>", goto_previous, {})
+  vim.keymap.set("n", "x", M.cool_x, {})
+  vim.keymap.set("n", "de", M.cool_de, {})
+  vim.keymap.set("n", "dw", function() M.cool_de("dw") end, {})
 end
 
 local restore_keymap = function()
@@ -187,9 +215,24 @@ local restore_keymap = function()
   vim.keymap.del("n", "<cr>", {})
   vim.keymap.del("n", "<C-j>", {})
   vim.keymap.del("n", "<C-k>", {})
+  vim.keymap.del("n", "x", {})
+  vim.keymap.del("n", "dw", {})
+  vim.keymap.del("n", "de", {})
 
   if(vim.g.cool_substitute_current_esc) then
     vim.keymap.set("n", "<esc>", vim.g.cool_substitute_current_esc, {})
+  end
+
+  if(vim.g.cool_substitute_current_x) then
+    vim.keymap.set("n", "x", vim.g.cool_substitute_current_x, {})
+  end
+
+  if(vim.g.cool_substitute_current_dw) then
+    vim.keymap.set("n", "dw", vim.g.cool_substitute_current_dw, {})
+  end
+
+  if(vim.g.cool_substitute_current_de) then
+    vim.keymap.set("n", "de", vim.g.cool_substitute_current_de, {})
   end
 
   if(vim.g.cool_substitute_current_cr) then
@@ -197,11 +240,11 @@ local restore_keymap = function()
   end
 
   if(vim.g.cool_substitute_current_cj) then
-    vim.keymap.set("n", "<C-j>", vim.g.cool_substitute_current_cr, {})
+    vim.keymap.set("n", "<C-j>", vim.g.cool_substitute_current_cj, {})
   end
 
   if(vim.g.cool_substitute_current_ck) then
-    vim.keymap.set("n", "<C-k>", vim.g.cool_substitute_current_cr, {})
+    vim.keymap.set("n", "<C-k>", vim.g.cool_substitute_current_ck, {})
   end
 end
 

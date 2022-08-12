@@ -160,11 +160,11 @@ local set_keymap = function()
   end
 
   if vim.g.cool_substitute_current_cj then
-    vim.keymap.del("n", "<cj>", {})
+    vim.keymap.del("n", "<c-j>", {})
   end
 
   if vim.g.cool_substitute_current_ck then
-    vim.keymap.del("n", "<ck>", {})
+    vim.keymap.del("n", "<c-k>", {})
   end
 
   vim.keymap.set("n", "<esc>", cool_substitute_esc, {})

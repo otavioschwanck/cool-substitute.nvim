@@ -14,6 +14,7 @@ function M.setup_keybindings(mappings)
   vim.keymap.set('n', mappings.apply_substitute_and_next, substitute.apply_and_next, bufopts('Start substitution and go to next substitution.'))
   vim.keymap.set('n', mappings.apply_substitute_and_prev, substitute.apply_and_previous, bufopts('Start substitution and go to previous substitution'))
   vim.keymap.set('n', mappings.apply_substitute_all, substitute.substitute_all, bufopts('Substitute all'))
+  vim.keymap.set('n', mappings.force_terminate_substitute, substitute.end_substitution, bufopts('Force Terminate Macro'))
 end
 
 return M

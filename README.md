@@ -29,6 +29,7 @@ require'cool-substitute'.setup({
   --   apply_substitute_and_next = 'M', -- Start substitution / Go to next substitution
   --   apply_substitute_and_prev = '<C-b>', -- same as M but backwards
   --   apply_substitute_all = 'ga', -- Substitute all
+  --   force_terminate_substitute = 'g!!' -- Terminate macro (if some bug happens)
   -- },
   -- reg_char = 'o', -- letter to save macro (Dont use number or uppercase here)
   -- mark_char = 't', -- mark the position at start of macro

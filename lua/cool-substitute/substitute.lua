@@ -350,6 +350,10 @@ function M.end_substitution()
 
   set('ignorecase', vim.g.cool_substitute_original_ignore_case)
 
+  if vim.fn.reg_recording() ~= '' then
+    vim.cmd("norm q")
+  end
+
   vim.g.cool_substitute_is_active = false
   vim.g.cool_substitute_is_substituing = false
   vim.g.cool_substitute_last_action = nil

@@ -23,26 +23,6 @@ local go_to = function(pos)
   fix_cursor_position()
 end
 
-function M.better_e()
-  if vim.g.cool_substitute_is_single_word == true then
-    local cpos = { vim.fn.line('.'), vim.fn.col('.') }
-    local spos = vim.fn.searchpos(vim.g.cool_substitute_last_searched_word, 'cn')
-    local pos = spos[2] + #vim.g.cool_substitute_last_searched_word
-
-    if(cpos[1] == spos[1]) then
-      vim.cmd("norm " .. pos - cpos[2] .. "l")
-
-      if vim.fn.col('.') ~= #vim.fn.getline('.') then
-        vim.cmd("norm h")
-      end
-    end
-  else
-    vim.keymap.del("n", "e", {})
-    vim.cmd("norm e")
-    vim.keymap.set("n", "e", M.better_e, {})
-  end
-end
-
 local get_pos = function()
   return vim.fn.searchpos(vim.g.cool_substitute_last_searched_word, 'n')
 end
@@ -200,7 +180,6 @@ local set_keymap = function()
   vim.keymap.set("n", "<cr>", M.skip, {})
   vim.keymap.set("n", "<C-j>", goto_next, {})
   vim.keymap.set("n", "<C-k>", goto_previous, {})
-  vim.keymap.set("n", "e", M.better_e, {})
 end
 
 local restore_keymap = function()
@@ -208,14 +187,9 @@ local restore_keymap = function()
   vim.keymap.del("n", "<cr>", {})
   vim.keymap.del("n", "<C-j>", {})
   vim.keymap.del("n", "<C-k>", {})
-  vim.keymap.del("n", "e", {})
 
   if(vim.g.cool_substitute_current_esc) then
     vim.keymap.set("n", "<esc>", vim.g.cool_substitute_current_esc, {})
-  end
-
-  if(vim.g.cool_substitute_current_e) then
-    vim.keymap.set("n", "e", vim.g.cool_substitute_current_e, {})
   end
 
   if(vim.g.cool_substitute_current_cr) then

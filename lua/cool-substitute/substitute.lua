@@ -240,6 +240,9 @@ local start_recording = function(start_opts)
 
   save_search_pos()
 
+  vim.g.cool_substitute_hl_id = os.time() + 223166
+  vim.fn.matchadd("DiffText", word, 10, vim.g.cool_substitute_hl_id)
+
   vim.cmd("norm! q" .. vim.g.cool_substitute_reg_char)
 
   if opts.edit_word then
@@ -295,6 +298,7 @@ function M.end_substitution()
 
   vim.cmd("norm `" .. vim.g.cool_substitute_mark_char)
   vim.cmd("noh")
+  vim.fn.matchdelete(vim.g.cool_substitute_hl_id)
 end
 
 local normalize_line = function()

@@ -2,7 +2,7 @@ local M = {}
 
 local set = vim.api.nvim_set_option
 
-local quick_key_to_substitute = '                                        SafeEditText123718cxzDUSAduasCGZXIUcgzIg'
+local quick_key_to_substitute = 'SafeEditText123718cxzDUSAduasCGZXIUcgzIg'
 
 local fix_cursor_position = function()
   local line_length = tonumber(#vim.fn.getline('.'))
@@ -320,7 +320,7 @@ local normalize_line = function()
   if verify_if_is_last_word() then
     local current_pos = { vim.fn.line('.'), vim.fn.col('.') }
 
-    vim.cmd("norm A" .. quick_key_to_substitute)
+    vim.cmd("norm A                    " .. quick_key_to_substitute)
     vim.g.cool_substitute_normalized_line = true
     vim.cmd("norm N")
 
@@ -331,7 +331,7 @@ end
 local remove_spaces = function()
   if vim.g.cool_substitute_normalized_line then
     vim.g.cool_substitute_normalized_line = false
-    vim.cmd("s/" .. quick_key_to_substitute .. "//ge")
+    vim.cmd("s/\\ *" .. quick_key_to_substitute .. "//ge")
 
   end
 end

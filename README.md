@@ -66,6 +66,11 @@ Example of a section for lualine:
 6. Navigate without changing with Ctrl + j and Ctrl + k
 7. To change all occurrences, press `ga`
 
+# Some tips:
+
+- when using `gm`, try to avoid using e, de and ce.  If some match has more letters in the word, it will be used.
+- g!m and g!M are awesome to change full words.
+
 You can press `<ESC>` at any point to cancel the substitution.
 
 # Example of usages

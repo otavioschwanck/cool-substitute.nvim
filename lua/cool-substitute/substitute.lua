@@ -4,8 +4,23 @@ local set = vim.api.nvim_set_option
 
 local quick_key_to_substitute = '                                        SafeEditText123718cxzDUSAduasCGZXIUcgzIg'
 
+local fix_cursor_position = function()
+  local line_length = tonumber(#vim.fn.getline('.'))
+  local line_expected_length = tonumber(vim.g.cool_substitute_matches_line_length[tostring(vim.g.cool_substitute_current_match)])
+
+  if vim.g.cool_substitute_last_action == 'next' then
+    if line_length > line_expected_length then
+      vim.cmd("norm " .. line_length - line_expected_length .. "l")
+    elseif line_length < line_expected_length then
+      vim.cmd("norm " .. line_expected_length - line_length .. "h")
+    end
+  end
+end
+
 local go_to = function(pos)
   vim.fn.cursor(pos[1], pos[2])
+
+  fix_cursor_position()
 end
 
 local get_pos = function()
@@ -15,10 +30,18 @@ end
 local save_search_pos = function()
   local current_position = get_pos()
   local positions = {}
+  local line_lengths = {}
+
+  local index = 1
 
   repeat
     table.insert(positions, get_pos())
+
+    line_lengths[tostring(index)] = tostring(#vim.fn.getline('.'))
+
     vim.fn.search(vim.g.cool_substitute_last_searched_word)
+
+    index = index + 1
   until get_pos()[1] == current_position[1] and get_pos()[2] == current_position[2]
 
   local start = positions[#positions]
@@ -28,6 +51,7 @@ local save_search_pos = function()
   vim.g.cool_substitute_matches = positions
   vim.g.cool_substitute_current_match = 1
   vim.g.cool_substitute_already_applieds = {}
+  vim.g.cool_substitute_matches_line_length = line_lengths
 end
 
 local current_match_already_applied = function()
@@ -336,7 +360,7 @@ function M.apply_and_next()
 
     normalize_line()
 
-    vim.cmd("norm! nN@" .. vim.g.cool_substitute_reg_char)
+    vim.cmd("norm! @" .. vim.g.cool_substitute_reg_char)
 
     remove_spaces()
 
@@ -367,7 +391,7 @@ function M.apply_and_previous()
 
     normalize_line()
 
-    vim.cmd("norm! nN@" .. vim.g.cool_substitute_reg_char)
+    vim.cmd("norm! @" .. vim.g.cool_substitute_reg_char)
 
     remove_spaces()
 

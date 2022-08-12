@@ -2,6 +2,8 @@ local M = {}
 
 local set = vim.api.nvim_set_option
 
+local quick_key_to_substitute = '                                        SafeEditText123718cxzDUSAduasCGZXIUcgzIg'
+
 local cool_substitute_esc = function()
   if vim.g.cool_substitute_is_active then
     M.end_substitution()
@@ -158,7 +160,7 @@ end
 
 local normalize_line = function()
   if verify_if_is_last_word() then
-    vim.cmd("norm A                    ")
+    vim.cmd("norm A" .. quick_key_to_substitute)
     vim.g.cool_substitute_normalized_line = true
     vim.cmd("norm N")
   end
@@ -167,7 +169,8 @@ end
 local remove_spaces = function()
   if vim.g.cool_substitute_normalized_line then
     vim.g.cool_substitute_normalized_line = false
-    vim.cmd("s/\\ *$//ge")
+    vim.cmd("s/" .. quick_key_to_substitute .. "//ge")
+
   end
 end
 

@@ -252,6 +252,7 @@ end
 local start_recording = function(start_opts)
   local opts = start_opts or {}
 
+  vim.fn.clearmatches()
   vim.g.cool_substitute_original_ignore_case = vim.api.nvim_get_option('ignorecase')
 
   set('ignorecase', false)
@@ -346,6 +347,8 @@ local stop_recording = function(stop_opts)
 end
 
 function M.end_substitution()
+  vim.fn.clearmatches()
+
   restore_keymap()
 
   set('ignorecase', vim.g.cool_substitute_original_ignore_case)
@@ -360,7 +363,6 @@ function M.end_substitution()
 
   vim.cmd("norm `" .. vim.g.cool_substitute_mark_char)
   vim.cmd("noh")
-  vim.fn.matchdelete(vim.g.cool_substitute_hl_id)
 end
 
 local normalize_line = function()

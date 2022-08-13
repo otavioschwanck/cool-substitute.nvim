@@ -184,7 +184,7 @@ local find_current_map = function(map)
     local mapping_buffer = mappings[i].buffer
 
     if string.lower(mappings[i].lhs) == map and (mapping_buffer == 0) then
-      result = mappings[i].rhs
+      result = mappings[i]
     end
   end
 
@@ -196,7 +196,6 @@ local set_keymap = function()
   vim.g.cool_substitute_current_cr = find_current_map("<cr>")
   vim.g.cool_substitute_current_cj = find_current_map("<c-j>")
   vim.g.cool_substitute_current_ck = find_current_map("<c-k>")
-  vim.g.cool_substitute_current_e = find_current_map("e")
   vim.g.cool_substitute_current_x = find_current_map("x")
   vim.g.cool_substitute_current_de = find_current_map("de")
   vim.g.cool_substitute_current_dw = find_current_map("dw")
@@ -219,32 +218,32 @@ local restore_keymap = function()
   vim.keymap.del("n", "dw", {})
   vim.keymap.del("n", "de", {})
 
-  if(vim.g.cool_substitute_current_esc) then
-    vim.keymap.set("n", "<esc>", vim.g.cool_substitute_current_esc, {})
+  if((vim.g.cool_substitute_current_esc or {}).rhs) then
+    vim.keymap.set("n", "<esc>", vim.g.cool_substitute_current_esc.rhs, { silent = vim.g.cool_substitute_current_esc.silent })
   end
 
-  if(vim.g.cool_substitute_current_x) then
-    vim.keymap.set("n", "x", vim.g.cool_substitute_current_x, {})
+  if((vim.g.cool_substitute_current_x or {}).rhs) then
+    vim.keymap.set("n", "x", vim.g.cool_substitute_current_x.rhs, { silent = vim.g.cool_substitute_current_x.silent })
   end
 
-  if(vim.g.cool_substitute_current_dw) then
-    vim.keymap.set("n", "dw", vim.g.cool_substitute_current_dw, {})
+  if((vim.g.cool_substitute_current_dw or {}).rhs) then
+    vim.keymap.set("n", "dw", vim.g.cool_substitute_current_dw.rhs, { silent = vim.g.cool_substitute_current_x.silent })
   end
 
-  if(vim.g.cool_substitute_current_de) then
-    vim.keymap.set("n", "de", vim.g.cool_substitute_current_de, {})
+  if((vim.g.cool_substitute_current_de or {}).rhs) then
+    vim.keymap.set("n", "de", vim.g.cool_substitute_current_de.rhs, { silent = vim.g.cool_substitute_current_dw.silent })
   end
 
-  if(vim.g.cool_substitute_current_cr) then
-    vim.keymap.set("n", "<cr>", vim.g.cool_substitute_current_cr, {})
+  if((vim.g.cool_substitute_current_cr or {}).rhs) then
+    vim.keymap.set("n", "<cr>", vim.g.cool_substitute_current_cr.rhs, { silent = vim.g.cool_substitute_current_cr.silent })
   end
 
-  if(vim.g.cool_substitute_current_cj) then
-    vim.keymap.set("n", "<C-j>", vim.g.cool_substitute_current_cj, {})
+  if((vim.g.cool_substitute_current_cj or {}).rhs) then
+    vim.keymap.set("n", "<C-j>", vim.g.cool_substitute_current_cj.rhs, { silent = vim.g.cool_substitute_current_cj.silent })
   end
 
-  if(vim.g.cool_substitute_current_ck) then
-    vim.keymap.set("n", "<C-k>", vim.g.cool_substitute_current_ck, {})
+  if((vim.g.cool_substitute_current_ck or {}).rhs) then
+    vim.keymap.set("n", "<C-k>", vim.g.cool_substitute_current_ck.rhs, { silent = vim.g.cool_substitute_current_ck.silent })
   end
 end
 

@@ -33,7 +33,7 @@ function M.cool_de(map)
   vim.cmd("norm " .. m)
   vim.keymap.set("n", m, M.cool_de, {})
 
-  if ((vim.fn.col('.') == #vim.fn.getline('.')) and not vim.g.cool_substitute_is_active) then
+  if ((vim.fn.col('.') == #vim.fn.getline('.')) and not vim.g.cool_substitute_is_applying) then
     vim.fn.setline('.', vim.fn.getline('.') .. " ")
     vim.fn.cursor(vim.fn.line('.'), #vim.fn.getline('.'))
   end
@@ -145,9 +145,9 @@ local verify_if_ended = function()
 end
 
 local cool_substitute_esc = function()
-  if vim.g.cool_substitute_is_active then
+  if vim.g.cool_substitute_is_applying then
     M.end_substitution()
-  elseif vim.g.cool_substitute_is_substituing then
+  elseif vim.g.cool_substitute_is_active then
     if vim.fn.reg_recording() ~= '' then
       vim.cmd("norm q")
     end
@@ -277,7 +277,7 @@ local start_recording = function(start_opts)
 
   vim.cmd("norm m" .. vim.g.cool_substitute_mark_char)
 
-  vim.g.cool_substitute_is_substituing = true
+  vim.g.cool_substitute_is_active = true
 
   vim.g.cool_substitute_word_for_status = word
 
@@ -317,8 +317,8 @@ local stop_recording = function(stop_opts)
 
   vim.cmd("norm q")
 
-  vim.g.cool_substitute_is_substituing = false
-  vim.g.cool_substitute_is_active = true
+  vim.g.cool_substitute_is_active = false
+  vim.g.cool_substitute_is_applying = true
 
   local next_keymap = vim.g.cool_substitute_next_keymap or "M"
 
@@ -357,8 +357,8 @@ function M.end_substitution()
     vim.cmd("norm q")
   end
 
+  vim.g.cool_substitute_is_applying = false
   vim.g.cool_substitute_is_active = false
-  vim.g.cool_substitute_is_substituing = false
   vim.g.cool_substitute_last_action = nil
 
   vim.cmd("norm `" .. vim.g.cool_substitute_mark_char)
@@ -406,7 +406,7 @@ function M.apply_and_next()
 
   if is_recording then
     stop_recording()
-  elseif not (vim.g.cool_substitute_is_active or vim.g.cool_substitute_is_substituing) then
+  elseif not (vim.g.cool_substitute_is_applying or vim.g.cool_substitute_is_active) then
     if vim.g.substitute_with_next_key then
       M.start({ edit_word = true })
     else
@@ -441,7 +441,7 @@ function M.apply_and_previous()
 
   if is_recording then
     stop_recording({ backwards = true })
-  elseif not (vim.g.cool_substitute_is_active or vim.g.cool_substitute_is_substituing) then
+  elseif not (vim.g.cool_substitute_is_applying or vim.g.cool_substitute_is_active) then
     print("Not in cool substitute.")
   else
     vim.g.cool_substitute_last_action = 'prev'
@@ -468,7 +468,7 @@ function M.apply_and_previous()
 end
 
 function M.substitute_all()
-  if not (vim.g.cool_substitute_is_active or vim.g.cool_substitute_is_substituing) then
+  if not (vim.g.cool_substitute_is_applying or vim.g.cool_substitute_is_active) then
     print("Not in cool substitute.")
     return
   end

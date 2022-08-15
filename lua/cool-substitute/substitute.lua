@@ -171,6 +171,7 @@ local escape_string = function(text)
   s = string.gsub(s, '%%', '[\\%%]')
   s = string.gsub(s, '%-', '[\\-]')
   s = string.gsub(s, '%+', '[\\+]')
+  s = string.gsub(s, '%.', '[\\.]')
 
   return s
 end

@@ -3,11 +3,11 @@
 
 CONTENTS                                         *cool-substitute*
 
-1. Setup .................... |cool-substitute.nvim|
+1. Setup .................... |cool-substitute.setup|
 2. Default Mappings ......... |cool-substitute.mappings|
 
 ============================================================================================
-SECTION 1: Setup                                                       *cool-substitute.nvim*
+SECTION 1: Setup                                                       *cool-substitute.setup*
 
 To setup cool substitute, just add this to your config:
 
@@ -35,14 +35,11 @@ require'cool-substitute'.setup({
 ============================================================================================
 SECTION 2: Default Mappingss ..................................cool-substitute.mappings
 
-
-| Command   | Description                                               |
-| --------- | --------------------------------------------------------- |
-| 'gm'      | Mark word / region                                        |
-| 'gM'      | Mark word / region and also edit                          |
-| 'g!M'     | Mark word / region and also edit.  Edit only full word.   |
-| 'g!m'     | Mark word / region. Edit only full word                   |
-| 'M'       | Start substitution / Go to next substitution              |
-| '<C-b>'   | same as M but backwards                                   |
-| 'ga'      | Substitute all                                            |
-| 'g!!      | Terminate macro (if some bug happens)                     |
+gm    = Mark word / region
+gM    = Mark word / region and also edit
+g!M   = Mark word / region and also edit.  Edit only full word.
+g!m   = Mark word / region. Edit only full word
+M     = Start substitution / Go to next substitution
+<C-b> = same as M but backwards
+ga    = Substitute all
+g!!   = Terminate macro (if some bug happens)

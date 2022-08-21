@@ -142,6 +142,7 @@ Cons:
 
 - [ ] - Add preview for other matches
 - [ ] - Autocomplete support
+- [ ] - Save the macros for further usage
 
 # More for me
 

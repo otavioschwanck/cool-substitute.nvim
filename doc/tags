@@ -1,0 +1,10 @@
+cool-substitute	cool_substitute.txt	/*cool-substitute*
+cool-substitute.apply_and_next	cool_substitute.txt	/*cool-substitute.apply_and_next*
+cool-substitute.apply_and_previous	cool_substitute.txt	/*cool-substitute.apply_and_previous*
+cool-substitute.end_substitution()	cool_substitute.txt	/*cool-substitute.end_substitution()*
+cool-substitute.setup	cool_substitute.txt	/*cool-substitute.setup*
+cool-substitute.skip()	cool_substitute.txt	/*cool-substitute.skip()*
+cool-substitute.start_recondig()	cool_substitute.txt	/*cool-substitute.start_recondig()*
+cool-substitute.stop_recording()	cool_substitute.txt	/*cool-substitute.stop_recording()*
+cool-substitute.substitute_all	cool_substitute.txt	/*cool-substitute.substitute_all*
+cool_substitute.nvim	cool_substitute.txt	/*cool_substitute.nvim*

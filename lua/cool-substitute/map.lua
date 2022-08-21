@@ -8,6 +8,7 @@ function M.setup_keybindings(mappings)
   end
 
   vim.keymap.set({'n', 'v'}, mappings.start, substitute.start, bufopts('Mark word/region for substitute'))
+  vim.keymap.set({'n', 'v'}, mappings.redo_last_record, substitute.redo_last_record, bufopts('Redo last record of cool substitute'))
   vim.keymap.set({'n', 'v'}, mappings.start_and_edit, function() substitute.start({ edit_word = true }) end, bufopts('Mark and edit word/region for substitute'))
   vim.keymap.set({'n', 'v'}, mappings.start_and_edit_word, function() substitute.start({ complete_word = true, edit_word = true }) end, bufopts('Mark and edit(only full) word/region for substitute'))
   vim.keymap.set({'n', 'v'}, mappings.start_word, function() substitute.start({ complete_word = true }) end, bufopts('Mark full word/region for substitute'))

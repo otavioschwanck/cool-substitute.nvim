@@ -249,6 +249,55 @@ local restore_keymap = function()
 end
 
 
+local use_last_record = function(start_opts)
+  local opts = start_opts or {}
+
+  vim.fn.clearmatches()
+  vim.g.cool_substitute_original_ignore_case = vim.api.nvim_get_option('ignorecase')
+
+  set('ignorecase', false)
+  set_keymap()
+
+  local word
+
+  if vim.fn.mode() == 'v' then
+    vim.cmd("norm \"" .. vim.g.cool_substitute_mark_char .. "y")
+
+    word = vim.fn.getreg(vim.g.cool_substitute_mark_char)
+
+    if word == vim.fn.expand("<cword>") then
+      vim.g.cool_substitute_is_single_word = true
+    end
+  elseif vim.fn.mode() == 'v' then
+    print("Visual Line not supported.")
+  else
+    word = vim.fn.expand("<cword>")
+    vim.g.cool_substitute_is_single_word = true
+  end
+
+  vim.cmd("norm m" .. vim.g.cool_substitute_mark_char)
+
+  word = escape_string(word)
+
+  if opts.complete_word then
+    word = "\\<" .. word .. "\\>"
+  end
+
+  vim.g.cool_substitute_last_searched_word = word
+
+  vim.fn.search(word, 'n')
+  vim.fn.setreg('/', word)
+  vim.cmd("norm! nN")
+
+  save_search_pos()
+
+  vim.g.cool_substitute_hl_id = os.time() + 223166
+  vim.fn.matchadd("DiffText", word, 10, vim.g.cool_substitute_hl_id)
+
+  vim.g.cool_substitute_is_applying = true
+end
+
+
 local start_recording = function(start_opts)
   local opts = start_opts or {}
 
@@ -495,6 +544,16 @@ function M.start(start_opts)
     print("Please exit macro before starting the substitute...")
   else
     start_recording(start_opts)
+  end
+end
+
+function M.redo_last_record(start_opts)
+  local is_recording = vim.fn.reg_recording() ~= ''
+
+  if is_recording then
+    print("Please exit macro before starting the substitute...")
+  else
+    use_last_record(start_opts)
   end
 end
 

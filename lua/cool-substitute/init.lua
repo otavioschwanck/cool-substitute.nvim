@@ -8,7 +8,8 @@ local default_mappings = {
   apply_substitute_and_next = 'M',
   apply_substitute_and_prev = '<C-b>',
   apply_substitute_all = 'ga',
-  force_terminate_substitute = 'g!!'
+  force_terminate_substitute = 'g!!',
+  redo_last_record = 'g!r',
 }
 
 function M.setup(setup_opts)

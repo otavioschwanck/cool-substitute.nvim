@@ -1,17 +1,18 @@
 ===========================================================================================
-*cool_substitute.nvim* is a plugin to perform macro on selections.
+*cool_substitute.nvim*                          is a plugin to perform macro on selections.
 
 CONTENTS                                         *cool-substitute*
 
 1. Setup .................... |cool-substitute.setup|
 2. Default Mappings ......... |cool-substitute.mappings|
+3. Usage .................... |cool-substitute.usage|
+4. Methods .................. |cool-substitute.methods|
 
-============================================================================================
-SECTION 1: Setup                                                       *cool-substitute.setup*
+=========================================================================================
+SECTION 1: Setup                                                  *cool-substitute.setup*
 
 To setup cool substitute, just add this to your config:
 
-```lua
 require'cool-substitute'.setup({
   setup_keybindings = true,
   mappings = {
@@ -30,10 +31,13 @@ require'cool-substitute'.setup({
   applying_substitution_color = "#98be65", -- for status line
   edit_word_when_starting_with_substitute_key = true (press M to mark and edit when not executing anything anything)
 })
-```
 
-============================================================================================
-SECTION 2: Default Mappingss ..................................cool-substitute.mappings
+
+
+
+
+=========================================================================================
+SECTION 2: Default Mappingss ..................................*cool-substitute.mappings*
 
 gm    = Mark word / region
 gM    = Mark word / region and also edit
@@ -43,3 +47,81 @@ M     = Start substitution / Go to next substitution
 <C-b> = same as M but backwards
 ga    = Substitute all
 g!!   = Terminate macro (if some bug happens)
+
+
+
+
+
+=========================================================================================
+SECTION 3: Usage .................................................*cool-substitute.usage*
+
+1. Press `gm` or `M` to mark word / region.  M will also delete the word.
+2. Do anything you want, change with r, e, add something at beggining of line, etc
+3. press `M` or `<C-b>` to go finish the editing record and go forward / backward
+4. Keep pressing `M` or `<C-b>` to go applying the changes in selection
+5. Press `<ENTER>` to mark match at cursor to be ignored
+6. Navigate without changing with Ctrl + j and Ctrl + k
+7. To change all occurrences, press `ga`
+
+
+
+
+
+=========================================================================================
+SECTION 4: Methods .............................................*cool-substitute.methods*
+
+require('cool-substitute.substitute').start_recording({ opts })    *cool-substitute.start_recondig()*
+
+Start recording the substitution.
+
+opts:
+
+- complete_word: boolean = Will select the word at point.  Use false on visual mode.
+- edit_word: boolean = If true, instead of just marking, it will also change and enter in insert mode.
+
+
+
+
+require('cool-substitute.sstop_recording').stop_recording({ opts })    *cool-substitute.stop_recording()*
+
+Stop recording and go to the next match.
+
+opts:
+
+- backwards: boolean = Will go to match at backwardWill go to match at backwards
+
+
+
+
+
+require('cool-substitute.substitute').end_substitution()    *cool-substitute.end_substitution()*
+
+Will finish the cool substitute.
+
+
+
+
+require('cool-substitute.skip').end_substitution()    *cool-substitute.skip()*
+
+Will mark current match at applied but do nothing.
+
+
+
+
+require('cool-substitute.apply_and_next').apply_and_next()    *cool-substitute.apply_and_next*
+
+Will mark as applied and go to next match.
+
+
+
+
+require('cool-substitute.apply_and_previous').end_substitution()    *cool-substitute.apply_and_previous*
+
+Will mark as applied and go to previous match.
+
+
+
+
+require('cool-substitute.substitute_all').end_substitution()    *cool-substitute.substitute_all*
+
+Apply the recorded macro to all substitutions

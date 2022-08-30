@@ -29,13 +29,17 @@ require'cool-substitute'.setup({
   --   apply_substitute_and_next = 'M', -- Start substitution / Go to next substitution
   --   apply_substitute_and_prev = '<C-b>', -- same as M but backwards
   --   apply_substitute_all = 'ga', -- Substitute all
-  --   force_terminate_substitute = 'g!!' -- Terminate macro (if some bug happens)
+  --   force_terminate_substitute = 'g!!', -- Terminate macro (if some bug happens)
+  --   terminate_substitute = '<esc>', -- Terminate macro
+  --   skip_substitute = '<cr>', -- Skip this occurrence
+  --   goto_next = '<C-j>', -- Go to next occurence
+  --   goto_previous = '<C-k>', -- Go to previous occurrence
   -- },
   -- reg_char = 'o', -- letter to save macro (Dont use number or uppercase here)
   -- mark_char = 't', -- mark the position at start of macro
   -- writing_substitution_color = "#ECBE7B", -- for status line
   -- applying_substitution_color = "#98be65", -- for status line
-  -- edit_word_when_starting_with_substitute_key = true (press M to mark and edit when not executing anything anything)
+  -- edit_word_when_starting_with_substitute_key = true -- (press M to mark and edit when not executing anything anything)
 })
 ```
 

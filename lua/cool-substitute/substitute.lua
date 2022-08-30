@@ -10,9 +10,9 @@ local fix_cursor_position = function()
 
   if vim.g.cool_substitute_last_action == 'next' then
     if line_length > line_expected_length then
-      vim.cmd("norm " .. line_length - line_expected_length .. "l")
+      vim.cmd("norm! " .. line_length - line_expected_length .. "l")
     elseif line_length < line_expected_length then
-      vim.cmd("norm " .. line_expected_length - line_length .. "h")
+      vim.cmd("norm! " .. line_expected_length - line_length .. "h")
     end
   end
 end
@@ -149,7 +149,7 @@ local cool_substitute_esc = function()
     M.end_substitution()
   elseif vim.g.cool_substitute_is_active then
     if vim.fn.reg_recording() ~= '' then
-      vim.cmd("norm q")
+      vim.cmd("norm! q")
     end
 
     M.end_substitution()
@@ -193,58 +193,58 @@ local find_current_map = function(map)
 end
 
 local set_keymap = function()
-  vim.g.cool_substitute_current_esc = find_current_map("<esc>")
-  vim.g.cool_substitute_current_cr = find_current_map("<cr>")
-  vim.g.cool_substitute_current_cj = find_current_map("<c-j>")
-  vim.g.cool_substitute_current_ck = find_current_map("<c-k>")
+  vim.g.cool_substitute_current_esc = find_current_map(vim.g.cool_substitute_terminate_substitute)
+  vim.g.cool_substitute_current_cr = find_current_map(vim.g.cool_substitute_skip_substitute)
+  vim.g.cool_substitute_current_cj = find_current_map(vim.g.cool_substitute_goto_next)
+  vim.g.cool_substitute_current_ck = find_current_map(vim.g.cool_substitute_goto_previous)
   vim.g.cool_substitute_current_x = find_current_map("x")
   vim.g.cool_substitute_current_de = find_current_map("de")
   vim.g.cool_substitute_current_dw = find_current_map("dw")
 
-  vim.keymap.set("n", "<esc>", cool_substitute_esc, {})
-  vim.keymap.set("n", "<cr>", M.skip, {})
-  vim.keymap.set("n", "<C-j>", goto_next, {})
-  vim.keymap.set("n", "<C-k>", goto_previous, {})
+  vim.keymap.set("n", vim.g.cool_substitute_terminate_substitute, cool_substitute_esc, {})
+  vim.keymap.set("n", vim.g.cool_substitute_skip_substitute, M.skip, {})
+  vim.keymap.set("n", vim.g.cool_substitute_goto_next, goto_next, {})
+  vim.keymap.set("n", vim.g.cool_substitute_goto_previous, goto_previous, {})
   vim.keymap.set("n", "x", M.cool_x, {})
   vim.keymap.set("n", "de", M.cool_de, {})
   vim.keymap.set("n", "dw", function() M.cool_de("dw") end, {})
 end
 
 local restore_keymap = function()
-  vim.keymap.del("n", "<esc>", {})
-  vim.keymap.del("n", "<cr>", {})
-  vim.keymap.del("n", "<C-j>", {})
-  vim.keymap.del("n", "<C-k>", {})
+  vim.keymap.del("n", vim.g.cool_substitute_terminate_substitute, {})
+  vim.keymap.del("n", vim.g.cool_substitute_skip_substitute, {})
+  vim.keymap.del("n", vim.g.cool_substitute_goto_next, {})
+  vim.keymap.del("n", vim.g.cool_substitute_goto_previous, {})
   vim.keymap.del("n", "x", {})
-  vim.keymap.del("n", "dw", {})
   vim.keymap.del("n", "de", {})
+  vim.keymap.del("n", "dw", {})
 
   if((vim.g.cool_substitute_current_esc or {}).rhs) then
-    vim.keymap.set("n", "<esc>", vim.g.cool_substitute_current_esc.rhs, { silent = vim.g.cool_substitute_current_esc.silent })
+    vim.keymap.set("n", vim.g.cool_substitute_terminate_substitute, vim.g.cool_substitute_current_esc.rhs, { silent = vim.g.cool_substitute_current_esc.silent })
+  end
+
+  if((vim.g.cool_substitute_current_cr or {}).rhs) then
+    vim.keymap.set("n", vim.g.cool_substitute_skip_substitute, vim.g.cool_substitute_current_cr.rhs, { silent = vim.g.cool_substitute_current_cr.silent })
+  end
+
+  if((vim.g.cool_substitute_current_cj or {}).rhs) then
+    vim.keymap.set("n", vim.g.cool_substitute_goto_next, vim.g.cool_substitute_current_cj.rhs, { silent = vim.g.cool_substitute_current_cj.silent })
+  end
+
+  if((vim.g.cool_substitute_current_ck or {}).rhs) then
+    vim.keymap.set("n", vim.g.cool_substitute_goto_previous, vim.g.cool_substitute_current_ck.rhs, { silent = vim.g.cool_substitute_current_ck.silent })
   end
 
   if((vim.g.cool_substitute_current_x or {}).rhs) then
     vim.keymap.set("n", "x", vim.g.cool_substitute_current_x.rhs, { silent = vim.g.cool_substitute_current_x.silent })
   end
 
-  if((vim.g.cool_substitute_current_dw or {}).rhs) then
-    vim.keymap.set("n", "dw", vim.g.cool_substitute_current_dw.rhs, { silent = vim.g.cool_substitute_current_x.silent })
-  end
-
   if((vim.g.cool_substitute_current_de or {}).rhs) then
     vim.keymap.set("n", "de", vim.g.cool_substitute_current_de.rhs, { silent = vim.g.cool_substitute_current_dw.silent })
   end
 
-  if((vim.g.cool_substitute_current_cr or {}).rhs) then
-    vim.keymap.set("n", "<cr>", vim.g.cool_substitute_current_cr.rhs, { silent = vim.g.cool_substitute_current_cr.silent })
-  end
-
-  if((vim.g.cool_substitute_current_cj or {}).rhs) then
-    vim.keymap.set("n", "<C-j>", vim.g.cool_substitute_current_cj.rhs, { silent = vim.g.cool_substitute_current_cj.silent })
-  end
-
-  if((vim.g.cool_substitute_current_ck or {}).rhs) then
-    vim.keymap.set("n", "<C-k>", vim.g.cool_substitute_current_ck.rhs, { silent = vim.g.cool_substitute_current_ck.silent })
+  if((vim.g.cool_substitute_current_dw or {}).rhs) then
+    vim.keymap.set("n", "dw", vim.g.cool_substitute_current_dw.rhs, { silent = vim.g.cool_substitute_current_x.silent })
   end
 end
 
@@ -261,7 +261,7 @@ local use_last_record = function(start_opts)
   local word
 
   if vim.fn.mode() == 'v' then
-    vim.cmd("norm \"" .. vim.g.cool_substitute_mark_char .. "y")
+    vim.cmd("norm! \"" .. vim.g.cool_substitute_mark_char .. "y")
 
     word = vim.fn.getreg(vim.g.cool_substitute_mark_char)
 
@@ -275,7 +275,7 @@ local use_last_record = function(start_opts)
     vim.g.cool_substitute_is_single_word = true
   end
 
-  vim.cmd("norm m" .. vim.g.cool_substitute_mark_char)
+  vim.cmd("norm! m" .. vim.g.cool_substitute_mark_char)
 
   word = escape_string(word)
 
@@ -310,7 +310,7 @@ local start_recording = function(start_opts)
   local word
 
   if vim.fn.mode() == 'v' then
-    vim.cmd("norm \"" .. vim.g.cool_substitute_mark_char .. "y")
+    vim.cmd("norm! \"" .. vim.g.cool_substitute_mark_char .. "y")
 
     word = vim.fn.getreg(vim.g.cool_substitute_mark_char)
 
@@ -324,7 +324,7 @@ local start_recording = function(start_opts)
     vim.g.cool_substitute_is_single_word = true
   end
 
-  vim.cmd("norm m" .. vim.g.cool_substitute_mark_char)
+  vim.cmd("norm! m" .. vim.g.cool_substitute_mark_char)
 
   vim.g.cool_substitute_is_active = true
 
@@ -364,7 +364,7 @@ end
 local stop_recording = function(stop_opts)
   local opts = stop_opts or {}
 
-  vim.cmd("norm q")
+  vim.cmd("norm! q")
 
   vim.g.cool_substitute_is_active = false
   vim.g.cool_substitute_is_applying = true
@@ -403,14 +403,14 @@ function M.end_substitution()
   set('ignorecase', vim.g.cool_substitute_original_ignore_case)
 
   if vim.fn.reg_recording() ~= '' then
-    vim.cmd("norm q")
+    vim.cmd("norm! q")
   end
 
   vim.g.cool_substitute_is_applying = false
   vim.g.cool_substitute_is_active = false
   vim.g.cool_substitute_last_action = nil
 
-  vim.cmd("norm `" .. vim.g.cool_substitute_mark_char)
+  vim.cmd("norm! `" .. vim.g.cool_substitute_mark_char)
   vim.cmd("noh")
 end
 
@@ -418,9 +418,9 @@ local normalize_line = function()
   if verify_if_is_last_word() then
     local current_pos = { vim.fn.line('.'), vim.fn.col('.') }
 
-    vim.cmd("norm A                    " .. quick_key_to_substitute)
+    vim.cmd("norm! A                    " .. quick_key_to_substitute)
     vim.g.cool_substitute_normalized_line = true
-    vim.cmd("norm N")
+    vim.cmd("norm! N")
 
     vim.fn.cursor(current_pos[1], current_pos[2])
   end

@@ -10,9 +10,9 @@ local fix_cursor_position = function()
 
   if vim.g.cool_substitute_last_action == 'next' then
     if line_length > line_expected_length then
-      vim.cmd("norm " .. line_length - line_expected_length .. "l")
+      vim.cmd("norm! " .. line_length - line_expected_length .. "l")
     elseif line_length < line_expected_length then
-      vim.cmd("norm " .. line_expected_length - line_length .. "h")
+      vim.cmd("norm! " .. line_expected_length - line_length .. "h")
     end
   end
 end
@@ -149,7 +149,7 @@ local cool_substitute_esc = function()
     M.end_substitution()
   elseif vim.g.cool_substitute_is_active then
     if vim.fn.reg_recording() ~= '' then
-      vim.cmd("norm q")
+      vim.cmd("norm! q")
     end
 
     M.end_substitution()
@@ -261,7 +261,7 @@ local use_last_record = function(start_opts)
   local word
 
   if vim.fn.mode() == 'v' then
-    vim.cmd("norm \"" .. vim.g.cool_substitute_mark_char .. "y")
+    vim.cmd("norm! \"" .. vim.g.cool_substitute_mark_char .. "y")
 
     word = vim.fn.getreg(vim.g.cool_substitute_mark_char)
 
@@ -275,7 +275,7 @@ local use_last_record = function(start_opts)
     vim.g.cool_substitute_is_single_word = true
   end
 
-  vim.cmd("norm m" .. vim.g.cool_substitute_mark_char)
+  vim.cmd("norm! m" .. vim.g.cool_substitute_mark_char)
 
   word = escape_string(word)
 
@@ -310,7 +310,7 @@ local start_recording = function(start_opts)
   local word
 
   if vim.fn.mode() == 'v' then
-    vim.cmd("norm \"" .. vim.g.cool_substitute_mark_char .. "y")
+    vim.cmd("norm! \"" .. vim.g.cool_substitute_mark_char .. "y")
 
     word = vim.fn.getreg(vim.g.cool_substitute_mark_char)
 
@@ -324,7 +324,7 @@ local start_recording = function(start_opts)
     vim.g.cool_substitute_is_single_word = true
   end
 
-  vim.cmd("norm m" .. vim.g.cool_substitute_mark_char)
+  vim.cmd("norm! m" .. vim.g.cool_substitute_mark_char)
 
   vim.g.cool_substitute_is_active = true
 
@@ -364,7 +364,7 @@ end
 local stop_recording = function(stop_opts)
   local opts = stop_opts or {}
 
-  vim.cmd("norm q")
+  vim.cmd("norm! q")
 
   vim.g.cool_substitute_is_active = false
   vim.g.cool_substitute_is_applying = true
@@ -403,14 +403,14 @@ function M.end_substitution()
   set('ignorecase', vim.g.cool_substitute_original_ignore_case)
 
   if vim.fn.reg_recording() ~= '' then
-    vim.cmd("norm q")
+    vim.cmd("norm! q")
   end
 
   vim.g.cool_substitute_is_applying = false
   vim.g.cool_substitute_is_active = false
   vim.g.cool_substitute_last_action = nil
 
-  vim.cmd("norm `" .. vim.g.cool_substitute_mark_char)
+  vim.cmd("norm! `" .. vim.g.cool_substitute_mark_char)
   vim.cmd("noh")
 end
 
@@ -418,9 +418,9 @@ local normalize_line = function()
   if verify_if_is_last_word() then
     local current_pos = { vim.fn.line('.'), vim.fn.col('.') }
 
-    vim.cmd("norm A                    " .. quick_key_to_substitute)
+    vim.cmd("norm! A                    " .. quick_key_to_substitute)
     vim.g.cool_substitute_normalized_line = true
-    vim.cmd("norm N")
+    vim.cmd("norm! N")
 
     vim.fn.cursor(current_pos[1], current_pos[2])
   end

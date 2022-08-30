@@ -10,6 +10,10 @@ local default_mappings = {
   apply_substitute_all = 'ga',
   force_terminate_substitute = 'g!!',
   redo_last_record = 'g!r',
+  terminate_substitute = '<esc>',
+  skip_substitute = '<cr>',
+  goto_next = '<C-j>',
+  goto_previous = '<C-k>',
 }
 
 function M.setup(setup_opts)

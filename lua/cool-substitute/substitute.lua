@@ -240,11 +240,11 @@ local restore_keymap = function()
   end
 
   if((vim.g.cool_substitute_current_de or {}).rhs) then
-    vim.keymap.set("n", "de", vim.g.cool_substitute_current_de.rhs, { silent = vim.g.cool_substitute_current_dw.silent })
+    vim.keymap.set("n", "de", vim.g.cool_substitute_current_de.rhs, { silent = vim.g.cool_substitute_current_de.silent })
   end
 
   if((vim.g.cool_substitute_current_dw or {}).rhs) then
-    vim.keymap.set("n", "dw", vim.g.cool_substitute_current_dw.rhs, { silent = vim.g.cool_substitute_current_x.silent })
+    vim.keymap.set("n", "dw", vim.g.cool_substitute_current_dw.rhs, { silent = vim.g.cool_substitute_current_dw.silent })
   end
 end
 

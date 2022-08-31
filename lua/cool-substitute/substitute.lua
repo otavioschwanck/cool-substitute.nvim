@@ -26,19 +26,6 @@ function M.cool_x()
   vim.keymap.set("n", "x", M.cool_x, {})
 end
 
-function M.cool_de(map)
-  local m = map or "de"
-
-  vim.keymap.del("n", m, {})
-  vim.cmd("norm " .. m)
-  vim.keymap.set("n", m, M.cool_de, {})
-
-  if ((vim.fn.col('.') == #vim.fn.getline('.')) and not vim.g.cool_substitute_is_applying) then
-    vim.fn.setline('.', vim.fn.getline('.') .. " ")
-    vim.fn.cursor(vim.fn.line('.'), #vim.fn.getline('.'))
-  end
-end
-
 local go_to = function(pos)
   vim.fn.cursor(pos[1], pos[2])
 
@@ -198,16 +185,12 @@ local set_keymap = function()
   vim.g.cool_substitute_current_cj = find_current_map(vim.g.cool_substitute_goto_next)
   vim.g.cool_substitute_current_ck = find_current_map(vim.g.cool_substitute_goto_previous)
   vim.g.cool_substitute_current_x = find_current_map("x")
-  vim.g.cool_substitute_current_de = find_current_map("de")
-  vim.g.cool_substitute_current_dw = find_current_map("dw")
 
   vim.keymap.set("n", vim.g.cool_substitute_terminate_substitute, cool_substitute_esc, {})
   vim.keymap.set("n", vim.g.cool_substitute_skip_substitute, M.skip, {})
   vim.keymap.set("n", vim.g.cool_substitute_goto_next, goto_next, {})
   vim.keymap.set("n", vim.g.cool_substitute_goto_previous, goto_previous, {})
   vim.keymap.set("n", "x", M.cool_x, {})
-  vim.keymap.set("n", "de", M.cool_de, {})
-  vim.keymap.set("n", "dw", function() M.cool_de("dw") end, {})
 end
 
 local restore_keymap = function()
@@ -216,8 +199,6 @@ local restore_keymap = function()
   vim.keymap.del("n", vim.g.cool_substitute_goto_next, {})
   vim.keymap.del("n", vim.g.cool_substitute_goto_previous, {})
   vim.keymap.del("n", "x", {})
-  vim.keymap.del("n", "de", {})
-  vim.keymap.del("n", "dw", {})
 
   if((vim.g.cool_substitute_current_esc or {}).rhs) then
     vim.keymap.set("n", vim.g.cool_substitute_terminate_substitute, vim.g.cool_substitute_current_esc.rhs, { silent = vim.g.cool_substitute_current_esc.silent })
@@ -237,14 +218,6 @@ local restore_keymap = function()
 
   if((vim.g.cool_substitute_current_x or {}).rhs) then
     vim.keymap.set("n", "x", vim.g.cool_substitute_current_x.rhs, { silent = vim.g.cool_substitute_current_x.silent })
-  end
-
-  if((vim.g.cool_substitute_current_de or {}).rhs) then
-    vim.keymap.set("n", "de", vim.g.cool_substitute_current_de.rhs, { silent = vim.g.cool_substitute_current_de.silent })
-  end
-
-  if((vim.g.cool_substitute_current_dw or {}).rhs) then
-    vim.keymap.set("n", "dw", vim.g.cool_substitute_current_dw.rhs, { silent = vim.g.cool_substitute_current_dw.silent })
   end
 end
 

@@ -148,7 +148,7 @@ Cons:
 - [ ] - Autocomplete support
 - [ ] - Save the macros for further usage
 
-# More for me
+# More of me
 
 Check out my neovim framework for JS and Ruby, it is user friendly, has builtin interactive tutorial and cheatsheet inside vim:
 

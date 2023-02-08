@@ -31,7 +31,7 @@ require'cool-substitute'.setup({
   --   apply_substitute_all = 'ga', -- Substitute all
   --   force_terminate_substitute = 'g!!', -- Terminate macro (if some bug happens)
   --   terminate_substitute = '<esc>', -- Terminate macro
-  --   skip_substitute = '<cr>', -- Skip this occurrence
+  --   skip_substitute = 'n', -- Skip this occurrence
   --   goto_next = '<C-j>', -- Go to next occurence
   --   goto_previous = '<C-k>', -- Go to previous occurrence
   -- },
@@ -67,7 +67,7 @@ Example of a section for lualine:
 2. Do anything you want, change with r, e, add something at beggining of line, etc
 3. press `M` or `<C-b>` to go finish the editing record and go forward / backward
 4. Keep pressing `M` or `<C-b>` to go applying the changes in selection
-5. Press `<ENTER>` to mark match at cursor to be ignored
+5. Press `n` to mark match at cursor to be ignored
 6. Navigate without changing with Ctrl + j and Ctrl + k
 7. To change all occurrences, press `ga`
 

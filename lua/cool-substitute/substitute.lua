@@ -171,7 +171,7 @@ local find_current_map = function(map)
   for i = 1, #mappings, 1 do
     local mapping_buffer = mappings[i].buffer
 
-    if string.lower(mappings[i].lhs) == map and (mapping_buffer == 0) then
+    if string.lower(mappings[i].lhs) == string.lower(map) and (mapping_buffer == 0) then
       result = mappings[i]
     end
   end

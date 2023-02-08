@@ -11,7 +11,7 @@ local default_mappings = {
   force_terminate_substitute = 'g!!',
   redo_last_record = 'g!r',
   terminate_substitute = '<esc>',
-  skip_substitute = '<cr>',
+  skip_substitute = 'n',
   goto_next = '<C-j>',
   goto_previous = '<C-k>',
 }

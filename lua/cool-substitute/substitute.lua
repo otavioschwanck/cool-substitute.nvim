@@ -202,22 +202,32 @@ local restore_keymap = function()
 
   if((vim.g.cool_substitute_current_esc or {}).rhs) then
     vim.keymap.set("n", vim.g.cool_substitute_terminate_substitute, vim.g.cool_substitute_current_esc.rhs, { silent = vim.g.cool_substitute_current_esc.silent })
+  elseif (vim.g.cool_substitute_current_esc or {}).callback then
+    vim.keymap.set("n", vim.g.cool_substitute_terminate_substitute, vim.g.cool_substitute_current_esc.callback, { silent = vim.g.cool_substitute_current_esc.silent })
   end
 
   if((vim.g.cool_substitute_current_cr or {}).rhs) then
     vim.keymap.set("n", vim.g.cool_substitute_skip_substitute, vim.g.cool_substitute_current_cr.rhs, { silent = vim.g.cool_substitute_current_cr.silent })
+  elseif ((vim.g.cool_substitute_current_cr or {}).callback) then
+    vim.keymap.set("n", vim.g.cool_substitute_skip_substitute, vim.g.cool_substitute_current_cr.callback, { silent = vim.g.cool_substitute_current_cr.silent })
   end
 
   if((vim.g.cool_substitute_current_cj or {}).rhs) then
     vim.keymap.set("n", vim.g.cool_substitute_goto_next, vim.g.cool_substitute_current_cj.rhs, { silent = vim.g.cool_substitute_current_cj.silent })
+  elseif ((vim.g.cool_substitute_current_cj or {}).callback) then
+    vim.keymap.set("n", vim.g.cool_substitute_goto_next, vim.g.cool_substitute_current_cj.callback, { silent = vim.g.cool_substitute_current_cj.silent })
   end
 
   if((vim.g.cool_substitute_current_ck or {}).rhs) then
     vim.keymap.set("n", vim.g.cool_substitute_goto_previous, vim.g.cool_substitute_current_ck.rhs, { silent = vim.g.cool_substitute_current_ck.silent })
+  elseif ((vim.g.cool_substitute_current_ck or {}).callback) then
+    vim.keymap.set("n", vim.g.cool_substitute_goto_previous, vim.g.cool_substitute_current_ck.callback, { silent = vim.g.cool_substitute_current_ck.silent })
   end
 
   if((vim.g.cool_substitute_current_x or {}).rhs) then
     vim.keymap.set("n", "x", vim.g.cool_substitute_current_x.rhs, { silent = vim.g.cool_substitute_current_x.silent })
+  elseif ((vim.g.cool_substitute_current_x or {}).callback) then
+    vim.keymap.set("n", "x", vim.g.cool_substitute_current_x.callback, { silent = vim.g.cool_substitute_current_x.silent })
   end
 end
 

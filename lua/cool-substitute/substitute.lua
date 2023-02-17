@@ -78,14 +78,14 @@ end
 local goto_previous = function()
   if vim.g.cool_substitute_applying_substitution then
     if (vim.g.cool_substitute_current_match == 1) then
-      vim.g.cool_substitute_current_match = (vim.g.cool_substitute_matches or {})
+      vim.g.cool_substitute_current_match = #(vim.g.cool_substitute_matches or {})
     end
 
     repeat
       vim.g.cool_substitute_current_match = vim.g.cool_substitute_current_match - 1
 
       if (vim.g.cool_substitute_current_match <= 1) then
-        vim.g.cool_substitute_current_match = (vim.g.cool_substitute_matches or {})
+        vim.g.cool_substitute_current_match = #(vim.g.cool_substitute_matches or {})
       end
     until not current_match_already_applied()
 
@@ -95,14 +95,14 @@ end
 
 local goto_next = function()
   if vim.g.cool_substitute_applying_substitution then
-    if (vim.g.cool_substitute_current_match == (vim.g.cool_substitute_matches or {})) then
+    if (vim.g.cool_substitute_current_match == #(vim.g.cool_substitute_matches or {})) then
       vim.g.cool_substitute_current_match = 0
     end
 
     repeat
       vim.g.cool_substitute_current_match = vim.g.cool_substitute_current_match + 1
 
-      if (vim.g.cool_substitute_current_match > (vim.g.cool_substitute_matches or {})) then
+      if (vim.g.cool_substitute_current_match > #(vim.g.cool_substitute_matches or {})) then
         vim.g.cool_substitute_current_match = 1
       end
     until not current_match_already_applied()
@@ -122,7 +122,7 @@ end
 local verify_if_ended = function()
   local applieds = vim.g.cool_substitute_already_applieds
 
-  if #applieds == (vim.g.cool_substitute_matches or {}) then
+  if #applieds == #(vim.g.cool_substitute_matches or {}) then
     M.end_substitution()
 
     return true
@@ -360,15 +360,15 @@ local stop_recording = function(stop_opts)
   vim.g.cool_substitute_already_applieds = { 1 }
 
   if opts.backwards then
-    if (vim.g.cool_substitute_matches or {}) > 1 then
+    if #(vim.g.cool_substitute_matches or {}) > 1 then
       vim.g.cool_substitute_last_action = 'prev'
-      vim.g.cool_substitute_current_match = (vim.g.cool_substitute_matches or {})
-      go_to(vim.g.cool_substitute_matches[(vim.g.cool_substitute_matches or {})])
+      vim.g.cool_substitute_current_match = #(vim.g.cool_substitute_matches or {})
+      go_to(vim.g.cool_substitute_matches[#(vim.g.cool_substitute_matches or {})])
     else
       M.end_substitution()
     end
   else
-    if (vim.g.cool_substitute_matches or {}) > 1 then
+    if #(vim.g.cool_substitute_matches or {}) > 1 then
       vim.g.cool_substitute_last_action = 'next'
       vim.g.cool_substitute_current_match = 2
       go_to(vim.g.cool_substitute_matches[2])
